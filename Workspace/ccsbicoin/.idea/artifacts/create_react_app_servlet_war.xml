@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="create-react-app-servlet:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="CCSBI.war">
+      <element id="artifact" artifact-name="create-react-app-servlet:war exploded" />
+    </root>
+  </artifact>
+</component>
