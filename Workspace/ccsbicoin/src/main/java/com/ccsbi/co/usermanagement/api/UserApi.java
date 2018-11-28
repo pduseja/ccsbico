@@ -1,20 +1,18 @@
 package com.ccsbi.co.usermanagement.api;
 
-
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccsbi.co.usermanagement.client.entity.Login;
+import com.ccsbi.co.usermanagement.client.entity.UsersLoginRecord;
 import com.ccsbi.co.usermanagement.service.ILoginService;
 
 import io.swagger.annotations.Api;
@@ -25,7 +23,7 @@ import io.swagger.annotations.ApiResponses;
 
 @RestController
 @Api
-@RequestMapping("/usermgmt")
+@RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserApi {
 
@@ -50,23 +48,28 @@ public class UserApi {
 	@PostMapping(path = "/login", produces = { MediaType.APPLICATION_XML_VALUE,
 			MediaType.APPLICATION_JSON_VALUE }, consumes = { MediaType.APPLICATION_XML_VALUE,
 					MediaType.APPLICATION_JSON_VALUE })
-	public String login(@ApiParam(value = "", required = true) @RequestBody Login login) {
+	public String login(@ApiParam(value = "", required = true) @RequestBody UsersLoginRecord login) {
 		LOGGER.info("Inside {}.login()", getClass().getSimpleName());
 		String success = new String();
 
-		success = loginService.login(convertLogin(login)).trim();
-		if (!StringUtils.isEmpty(success)) {
-			success = "Login Successfully!!";
+		if (StringUtils.isEmpty(login.getToken())) {
+			success = loginService.login(convertLogin(login)).trim();
+			if (!StringUtils.isEmpty(success)) {
+				success = "Login Successfully!!";
+			} else {
+				success = "Unable to Login due to some internal error!!";
+			}
 		} else {
-			success = "Unable to Login due to some internal error!!";
+			success = loginService.getUserName(convertLogin(login));
+			
 		}
 
 		return success;
 	}
 
-	private com.ccsbi.co.usermanagement.service.model.Login convertLogin(Login login) {
+	private com.ccsbi.co.usermanagement.service.model.UsersLoginRecord convertLogin(UsersLoginRecord login) {
 
-		return dozerMapper.map(login, com.ccsbi.co.usermanagement.service.model.Login.class);
+		return dozerMapper.map(login, com.ccsbi.co.usermanagement.service.model.UsersLoginRecord.class);
 	}
 
 }

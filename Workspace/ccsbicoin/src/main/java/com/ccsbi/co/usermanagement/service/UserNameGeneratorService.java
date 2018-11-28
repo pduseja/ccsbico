@@ -3,13 +3,13 @@ package com.ccsbi.co.usermanagement.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ccsbi.co.usermanagement.repository.IUserNameGeneratorRepo;
+import com.ccsbi.co.usermanagement.repository.UserNameGeneratorRepo;
 
 @Service
 public class UserNameGeneratorService {
 	
 	@Autowired
-	IUserNameGeneratorRepo userNameRepo;
+	UserNameGeneratorRepo userNameRepo;
 	
 	public String userNameGen(String firstName, String lastName) {
 		
